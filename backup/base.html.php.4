@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - <?php echo $title ?? 'My Tasks'; ?></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6c63ff;
+            --primary-light: #8b85ff;
+            --primary-dark: #4d44db;
+            --secondary-color: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --dark-color: #343a40;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --box-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+            --transition-speed: 0.3s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        /* Enhanced Navbar */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform var(--transition-speed) ease;
+        }
+        
+        .navbar-brand:hover {
+            transform: translateY(-2px);
+        }
+        
+        .navbar-logo {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 2px;
+            background: white;
+        }
+        
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+        
+        .brand-subtext {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            font-weight: normal;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            transition: all var(--transition-speed) ease;
+            margin: 0 2px;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white !important;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            padding: 2rem 1rem;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            background: white;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-hover);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-bottom: none;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        /* Forms */
+        .form-control, .form-select {
+            border: 2px solid var(--medium-gray);
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(108, 99, 255, 0.25);
+            transform: translateY(-1px);
+        }
+        
+        .input-group .form-control:focus {
+            transform: none;
+        }
+        
+        /* Buttons */
+        .btn {
+            border-radius: 6px;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            transition: all var(--transition-speed) ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #3a32b8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #1e7e34 100%);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #c82333 100%);
+        }
+        
+        .btn-outline-dark, .btn-outline-warning, .btn-outline-success {
+            border: 2px solid;
+            background: transparent;
+        }
+        
+        .btn-outline-dark:hover, .btn-outline-warning:hover, .btn-outline-success:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Task Items */
+        .task-item {
+            border: none;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 10px;
+            border-radius: 6px;
+            transition: all var(--transition-speed) ease;
+            padding: 1rem;
+            background: white;
+        }
+        
+        .task-item:hover {
+            background: var(--light-gray);
+            transform: translateX(5px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .task-item.completed-task {
+            border-left-color: var(--success-color);
+            background: linear-gradient(90deg, #f8f9fa 0%, #e8f5e9 100%);
+        }
+        
+        .task-item.high-priority {
+            border-left-color: var(--danger-color);
+            background: linear-gradient(90deg, #f8f9fa 0%, #ffe6e6 100%);
+        }
+        
+        .task-item.medium-priority {
+            border-left-color: var(--warning-color);
+        }
+        
+        .task-item.low-priority {
+            border-left-color: var(--dark-gray);
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 0.5em 0.8em;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--dark-color) 0%, #212529 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        footer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        /* Loading States */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            100% { left: 100%; }
+        }
+        
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--dark-gray);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        /* Task Actions */
+        .task-actions {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .task-actions .btn {
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .card-body {
+                padding: 1rem;
+            }
+            
+            .navbar-brand {
+                gap: 8px;
+            }
+            
+            .brand-text {
+                font-size: 1.2rem;
+            }
+            
+            .input-group {
+                flex-wrap: wrap;
+            }
+            
+            .input-group > * {
+                margin-bottom: 5px;
+                flex: 1 0 100%;
+            }
+            
+            .input-group > *:last-child {
+                margin-bottom: 0;
+            }
+            
+            .task-item {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .task-actions {
+                justify-content: flex-end;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .card-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .filter-btns {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .navbar-collapse {
+                background: rgba(0, 0, 0, 0.9);
+                padding: 1rem;
+                border-radius: 0 0 var(--border-radius) var(--border-radius);
+                margin-top: 10px;
+            }
+        }
+        
+        /* Dark Mode Support (Optional) */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #121212;
+                color: #e0e0e0;
+            }
+            
+            .card {
+                background: #1e1e1e;
+                color: #e0e0e0;
+            }
+            
+            .form-control, .form-select {
+                background: #2d2d2d;
+                border-color: #404040;
+                color: #e0e0e0;
+            }
+            
+            .task-item:hover {
+                background: #2d2d2d;
+            }
+        }
+        
+        /* Accessibility Improvements */
+        .btn:focus, .form-control:focus, .form-select:focus {
+            outline: 3px solid rgba(108, 99, 255, 0.5);
+            outline-offset: 2px;
+        }
+        
+        /* Print Styles */
+        @media print {
+            .navbar, footer, .task-actions, .filter-btns, .card-header .btn {
+                display: none !important;
+            }
+            
+            .container {
+                padding: 0;
+            }
+            
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">
+                <img src="images/sunbeam.jpg" alt="TodoApp Logo" class="navbar-logo">
+                <div>
+                    <span class="brand-text">TodoApp</span>
+                    <br>
+                    <small class="brand-subtext">Get Things Done</small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <?php if (isLoggedIn()): ?>
+                    <li class="nav-item">
+                        <span class="nav-link text-light">
+                            <i class="fas fa-user-circle me-1"></i>
+                            Hello, <?php echo htmlspecialchars(getCurrentUsername()); ?>
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php">
+                            <i class="fas fa-tasks me-1"></i>My Tasks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                    <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <?php echo $content ?? ''; ?>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><i class="fas fa-copyright me-1"></i> <?php echo date('Y'); ?> SunBeam Infotech Pvt. Ltd.</p>
+                    <p class="small">TodoApp - Simple, Powerful Task Management</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="small">
+                        <i class="fas fa-heart text-danger me-1"></i> Made with care
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-code me-1"></i> Version 1.0.0
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Animation and Interaction Scripts -->
+    <script>
+    // Enhanced notification system
+    document.addEventListener('DOMContentLoaded', function() {
+        // ... (keep existing notification code) ...
+        
+        // Add hover effects to cards
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Form validation enhancement
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const inputs = this.querySelectorAll('[required]');
+                let isValid = true;
+                
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        input.classList.add('is-invalid');
+                        isValid = false;
+                        
+                        // Create error message if not exists
+                        if (!input.nextElementSibling?.classList.contains('invalid-feedback')) {
+                            const errorDiv = document.createElement('div');
+                            errorDiv.className = 'invalid-feedback';
+                            errorDiv.textContent = 'This field is required';
+                            input.parentNode.appendChild(errorDiv);
+                        }
+                    } else {
+                        input.classList.remove('is-invalid');
+                        const errorDiv = input.nextElementSibling;
+                        if (errorDiv?.classList.contains('invalid-feedback')) {
+                            errorDiv.remove();
+                        }
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    showNotification('Please fill all required fields', 'danger');
+                }
+            });
+        });
+        
+        // Task priority styling
+        document.querySelectorAll('.task-item').forEach(task => {
+            const priority = task.querySelector('.badge')?.textContent.trim();
+            if (priority) {
+                task.classList.add(priority.toLowerCase() + '-priority');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId !== '#') {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Add loading state to buttons on click
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.type === 'submit' || this.getAttribute('href')) {
+                    this.classList.add('loading');
+                    setTimeout(() => {
+                        this.classList.remove('loading');
+                    }, 1500);
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
