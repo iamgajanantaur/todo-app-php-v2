@@ -20,11 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             mysqli_stmt_bind_param($stmt, "ss", $username, $hashed_pw);
             
             if (mysqli_stmt_execute($stmt)) {
-                flashMessage("Registration successful! Please log in.");
+                flashMessage("Registration successful! Welcome, {$username}!", 'success');
                 redirect('login.php');
             } else {
                 if (mysqli_errno($conn) == 1062) { // Duplicate entry
-                    flashMessage("Username already exists.", 'error');
+                    flashMessage("Username '{$username}' already exists. Please choose another.", 'error');
                 } else {
                     flashMessage("Registration failed. Please try again.", 'error');
                 }

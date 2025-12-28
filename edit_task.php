@@ -11,12 +11,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $new_name = trim($_POST['task_name']);
     
     if (!empty($new_name)) {
+        // Get old task name for comparison
+        $stmt = mysqli_prepare($conn, "SELECT name FROM tasks WHERE id = ? AND user_id = ?");
+        mysqli_stmt_bind_param($stmt, "ii", $task_id, $user_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $old_name);
+        mysqli_stmt_fetch($stmt);
+        mysqli_stmt_close($stmt);
+        
+        // Update the task
         $stmt = mysqli_prepare($conn, 
             "UPDATE tasks SET name = ? WHERE id = ? AND user_id = ?");
         mysqli_stmt_bind_param($stmt, "sii", $new_name, $task_id, $user_id);
         
         if (mysqli_stmt_execute($stmt)) {
-            // flashMessage("Task updated successfully!");
+            if ($old_name !== $new_name) {
+                flashMessage("Task updated from '{$old_name}' to '{$new_name}'!", 'success');
+            } else {
+                flashMessage("Task saved!", 'success');
+            }
         } else {
             flashMessage("Failed to update task.", 'error');
         }

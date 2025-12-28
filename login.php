@@ -20,10 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($user && password_verify($password, $user['password_hash'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
-        flashMessage("Login successful!");
+        $_SESSION['welcome_message'] = "Welcome back, " . htmlspecialchars($user['username']) . "!";
         redirect('index.php');
     } else {
-        flashMessage("Invalid credentials.", 'error');
+        flashMessage("Invalid username or password. Please try again.", 'error');
     }
 }
 

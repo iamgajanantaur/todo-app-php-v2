@@ -98,68 +98,51 @@
             border-left: 1px solid rgba(255, 255, 255, 0.3);
         }
         
-        /* Make navbar taller - INCREASED HEIGHT */
+        /* Make navbar shorter - REDUCED HEIGHT */
         .navbar {
-            min-height: 55px; /* Increased from 35px */
-            padding: 8px 0; /* Increased padding */
+            min-height: 35px;
+            padding: 5px 0;
         }
         
         .navbar-nav .nav-link {
-            font-size: 0.95rem; /* Slightly larger */
-            padding: 0.4rem 0.8rem !important; /* Increased padding */
+            font-size: 0.9rem;
         }
         
-        /* Footer taller */
-        footer {
-            padding: 15px 0 !important; /* Increased padding */
-        }
-        
-        /* Notification System - IMPROVED */
+        /* Notification System */
         .notification-container {
             position: fixed;
-            top: 85px; /* Adjusted for taller navbar */
+            top: 80px;
             right: 20px;
             z-index: 9999;
-            max-width: 380px; /* Slightly wider */
+            max-width: 350px;
             width: 100%;
             pointer-events: none;
         }
         
         .notification {
             pointer-events: auto;
-            margin-bottom: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            overflow: hidden;
-            border-left: 5px solid transparent;
-            animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards, fadeOut 0.5s ease 2.7s forwards;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid transparent;
+            animation: slideInRight 0.3s ease forwards, fadeOut 0.5s ease 1.7s forwards;
             transform: translateX(120%);
             opacity: 0;
         }
         
         .notification.success {
             border-left-color: #28a745;
-            background-color: #28a745;
         }
         
         .notification.danger {
             border-left-color: #dc3545;
-            background-color: #dc3545;
         }
         
         .notification.warning {
             border-left-color: #ffc107;
-            background-color: #ffc107;
         }
         
         .notification.info {
             border-left-color: #17a2b8;
-            background-color: #17a2b8;
-        }
-        
-        .notification.primary {
-            border-left-color: var(--primary-color);
-            background-color: var(--primary-color);
         }
         
         @keyframes slideInRight {
@@ -184,55 +167,44 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 16px;
-            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
         }
         
         .notification-message {
             flex-grow: 1;
-            margin-right: 12px;
+            margin-right: 10px;
             font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .notification-icon {
-            font-size: 1.2rem;
         }
         
         .notification-close {
-            background: rgba(255, 255, 255, 0.2);
+            background: none;
             border: none;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             line-height: 1;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
+            padding: 0;
             cursor: pointer;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.2s;
-            flex-shrink: 0;
+            opacity: 0.7;
+            transition: opacity 0.2s;
         }
         
         .notification-close:hover {
-            background: rgba(255, 255, 255, 0.3);
+            opacity: 1;
         }
         
         /* Progress bar for notifications */
         .notification-progress {
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 0 0 4px 4px;
             overflow: hidden;
+            margin-top: -3px;
         }
         
         .notification-progress-bar {
             height: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            animation: progressBar 3s linear forwards;
+            background: rgba(255, 255, 255, 0.7);
+            animation: progressBar 2s linear forwards;
             transform-origin: left;
         }
         
@@ -248,36 +220,15 @@
         /* For smaller screens */
         @media (max-width: 768px) {
             .notification-container {
-                top: 80px;
+                top: 70px;
                 right: 10px;
                 left: 10px;
                 max-width: none;
             }
             
             .navbar-logo {
-                height: 26px;
-                margin-right: 8px;
-            }
-            
-            .brand-text {
-                font-size: 1.1rem;
-                padding-left: 6px;
-            }
-            
-            .navbar {
-                min-height: 50px;
-            }
-        }
-        
-        /* Extra small screens */
-        @media (max-width: 576px) {
-            .notification-container {
-                top: 75px;
-            }
-            
-            .navbar-logo {
-                height: 24px;
-                margin-right: 6px;
+                height: 22px;
+                margin-right: 5px;
             }
             
             .brand-text {
@@ -285,18 +236,31 @@
                 padding-left: 5px;
             }
             
-            .notification {
-                margin-bottom: 8px;
+            .navbar {
+                min-height: 30px;
+            }
+        }
+        
+        /* Extra small screens */
+        @media (max-width: 576px) {
+            .notification-container {
+                top: 65px;
             }
             
-            .notification-content {
-                padding: 12px 14px;
+            .navbar-logo {
+                height: 20px;
+                margin-right: 4px;
+            }
+            
+            .brand-text {
+                font-size: 0.9rem;
+                padding-left: 4px;
             }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 py-2"> <!-- Increased mb and py -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3 py-1">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.php">
                 <div class="brand-container">
@@ -315,17 +279,17 @@
                 <ul class="navbar-nav ms-auto">
                     <?php if (isLoggedIn()): ?>
                     <li class="nav-item">
-                        <span class="nav-link text-light">Hello, <?php echo htmlspecialchars(getCurrentUsername()); ?></span>
+                        <span class="nav-link text-light" style="padding: 0.2rem 0.5rem;">Hello, <?php echo htmlspecialchars(getCurrentUsername()); ?></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Logout</a>
+                        <a class="nav-link" href="logout.php" style="padding: 0.2rem 0.5rem;">Logout</a>
                     </li>
                     <?php else: ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="login.php">Login</a>
+                        <a class="nav-link" href="login.php" style="padding: 0.2rem 0.5rem;">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="register.php">Register</a>
+                        <a class="nav-link" href="register.php" style="padding: 0.2rem 0.5rem;">Register</a>
                     </li>
                     <?php endif; ?>
                 </ul>
@@ -340,9 +304,9 @@
         <?php echo $content ?? ''; ?>
     </div>
 
-    <footer class="mt-auto py-3 bg-dark text-white"> <!-- Increased py -->
+    <footer class="mt-auto py-2 bg-dark text-white">
         <div class="container text-center">
-            <p class="mb-0" style="font-size: 0.9rem;">© <?php echo date('Y'); ?> SunBeam Infotech Pvt. Ltd. - TodoApp. All rights reserved.</p>
+            <p class="mb-0" style="font-size: 0.85rem;">© <?php echo date('Y'); ?> SunBeam Infotech Pvt. Ltd. - TodoApp. All rights reserved.</p>
         </div>
     </footer>
 
@@ -355,10 +319,10 @@
         let notificationQueue = [];
         let isShowingNotification = false;
         
-        // Function to show a notification with icon
-        function showNotification(message, type = 'success', icon = null) {
+        // Function to show a notification
+        function showNotification(message, type = 'success') {
             // Add to queue
-            notificationQueue.push({ message, type, icon });
+            notificationQueue.push({ message, type });
             
             // If not currently showing a notification, show the next one
             if (!isShowingNotification) {
@@ -374,33 +338,25 @@
             }
             
             isShowingNotification = true;
-            const { message, type, icon } = notificationQueue.shift();
+            const { message, type } = notificationQueue.shift();
             
             // Create notification element
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             
-            // Determine icon based on type if not provided
-            let iconToUse = icon;
-            if (!iconToUse) {
-                switch(type) {
-                    case 'success': iconToUse = 'bi-check-circle-fill'; break;
-                    case 'danger': iconToUse = 'bi-exclamation-circle-fill'; break;
-                    case 'warning': iconToUse = 'bi-exclamation-triangle-fill'; break;
-                    case 'info': iconToUse = 'bi-info-circle-fill'; break;
-                    default: iconToUse = 'bi-bell-fill'; break;
-                }
+            // Determine background color based on type
+            let bgColor;
+            switch(type) {
+                case 'danger': bgColor = '#dc3545'; break;
+                case 'warning': bgColor = '#ffc107'; break;
+                case 'info': bgColor = '#17a2b8'; break;
+                default: bgColor = '#28a745'; break;
             }
             
             notification.innerHTML = `
-                <div class="notification-content">
-                    <div class="notification-message">
-                        <i class="bi ${iconToUse} notification-icon"></i>
-                        <span>${message}</span>
-                    </div>
-                    <button class="notification-close" onclick="this.closest('.notification').remove(); checkQueue();">
-                        <i class="bi bi-x"></i>
-                    </button>
+                <div class="notification-content" style="background-color: ${bgColor}; color: white;">
+                    <div class="notification-message">${message}</div>
+                    <button class="notification-close text-white" onclick="this.closest('.notification').remove(); checkQueue();">×</button>
                 </div>
                 <div class="notification-progress">
                     <div class="notification-progress-bar"></div>
@@ -410,13 +366,13 @@
             // Add to container
             notificationContainer.appendChild(notification);
             
-            // Auto remove after 3 seconds
+            // Auto remove after 2 seconds (1 second for fade out animation)
             setTimeout(() => {
                 if (notification.parentNode) {
                     notification.remove();
                 }
                 showNextNotification();
-            }, 3000);
+            }, 2000);
         }
         
         // Make checkQueue available globally for the close button
@@ -430,20 +386,21 @@
         if (!empty($flashMessages)) {
             echo "// Flash messages from PHP\n";
             foreach ($flashMessages as $flash) {
-                $alertClass = $flash['type'] == 'error' ? 'danger' : 
-                             ($flash['type'] == 'warning' ? 'warning' : 
-                             ($flash['type'] == 'info' ? 'info' : 'success'));
+                $alertClass = $flash['type'] == 'error' ? 'danger' : ($flash['type'] == 'warning' ? 'warning' : 'success');
                 $message = addslashes($flash['message']);
                 echo "showNotification('{$message}', '{$alertClass}');\n";
             }
         }
         ?>
         
-        // Show welcome message if just logged in
-        <?php if (isset($_SESSION['welcome_message'])): ?>
-        showNotification('<?php echo addslashes($_SESSION['welcome_message']); ?>', 'success', 'bi-person-check');
-        <?php unset($_SESSION['welcome_message']); ?>
-        <?php endif; ?>
+        // Intercept form submissions to show notifications
+        document.addEventListener('submit', function(e) {
+            // Check if it's a task form
+            if (e.target.querySelector('input[name="task_name"]')) {
+                // We'll handle the notification on the server side via flash messages
+                return;
+            }
+        });
     });
     </script>
 </body>
