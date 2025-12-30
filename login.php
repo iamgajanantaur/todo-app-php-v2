@@ -55,6 +55,29 @@ ob_start();
     .login-body {
         padding: 1.5rem;
     }
+    
+    .password-toggle {
+        background-color: #f8f9fa;
+        border: 1px solid #ced4da;
+        border-left: none;
+        cursor: pointer;
+        padding: 0.375rem 0.75rem;
+        border-top-right-radius: 0.375rem;
+        border-bottom-right-radius: 0.375rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 45px;
+    }
+    
+    .password-toggle:hover {
+        background-color: #e9ecef;
+    }
+    
+    .password-toggle i {
+        font-size: 1rem;
+        color: #6c757d;
+    }
 </style>
 
 <div class="login-container">
@@ -63,7 +86,7 @@ ob_start();
             <h4 class="mb-0 text-center"><i class="bi bi-box-arrow-in-right me-2"></i>Login</h4>
         </div>
         <div class="card-body login-body">
-            <form method="POST">
+            <form method="POST" id="loginForm">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
                     <div class="input-group">
@@ -72,13 +95,21 @@ ob_start();
                                placeholder="Enter your username">
                     </div>
                 </div>
-                <div class="mb-4">
+                <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
                         <input type="password" class="form-control" id="password" name="password" required 
                                placeholder="Enter your password">
+                        <span class="input-group-text password-toggle" id="togglePassword">
+                            <i class="bi bi-eye"></i>
+                        </span>
                     </div>
+                </div>
+                <div class="text-end mb-3">
+                    <a href="reset_password_request.php" class="text-decoration-none small">
+                        Forgot password?
+                    </a>
                 </div>
                 <button type="submit" class="btn btn-primary w-100 py-2 mb-3">
                     <i class="bi bi-box-arrow-in-right me-2"></i> Login
@@ -92,6 +123,31 @@ ob_start();
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = togglePassword.querySelector('i');
+    
+    togglePassword.addEventListener('click', function() {
+        // Toggle the password field type
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        // Toggle the eye icon
+        if (type === 'text') {
+            eyeIcon.classList.remove('bi-eye');
+            eyeIcon.classList.add('bi-eye-slash');
+            togglePassword.title = "Hide password";
+        } else {
+            eyeIcon.classList.remove('bi-eye-slash');
+            eyeIcon.classList.add('bi-eye');
+            togglePassword.title = "Show password";
+        }
+    });
+});
+</script>
 <?php
 $content = ob_get_clean();
 require 'base.html.php';

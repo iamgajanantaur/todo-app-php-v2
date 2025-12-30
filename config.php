@@ -2,7 +2,7 @@
 // Database configuration
 define('DB_HOST', 'localhost');
 define('DB_USER', 'todo_user');
-define('DB_PASS', 'password');
+define('DB_PASS', 'sunbeam');
 define('DB_NAME', 'mytododb');
 
 // Session configuration
@@ -10,9 +10,7 @@ session_start();
 
 // Helper functions
 function isPasswordComplex($password) {
-    return (strlen($password) >= 8 && 
-            preg_match('/[A-Z]/', $password) &&
-            preg_match('/[0-9]/', $password));
+    return (strlen($password) >= 6); // Simplified: only requires 6+ characters
 }
 
 function getDBConnection() {
